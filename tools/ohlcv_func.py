@@ -2,7 +2,6 @@ import os
 import numpy as np
 import pandas as pd
 import yfinance as yf
-import requests
 from dotenv import load_dotenv
 from llama_index.core.workflow import Context
 load_dotenv()
@@ -87,7 +86,7 @@ def get_ohlcv(symbol: str):
     filename = f"/tmp/{symbol.replace('.', '_')}.csv"
     df.reset_index().to_csv(filename, index=False)
 
-    return filename
+    return filename, symbol
 
 
 

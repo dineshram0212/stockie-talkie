@@ -1,4 +1,3 @@
-// components/NewsCardGrid.js
 'use client';
 
 import React from 'react';

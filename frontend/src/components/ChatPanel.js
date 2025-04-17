@@ -1,4 +1,3 @@
-// components/ChatPanel.js
 'use client';
 
 import React, { useRef, useEffect } from 'react';
@@ -7,7 +6,6 @@ import { MessageSquare, Send } from 'lucide-react';
 export default function ChatPanel({ messages, handleSend }) {
   const messagesEndRef = useRef(null);
 
-  // Auto scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);

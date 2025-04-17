@@ -15,7 +15,7 @@ class CustomChartTool(BaseTool):
     def __call__(self, filepath: str) -> ToolOutput:
         figures = plot_stock_chart(filepath)
         return ToolOutput(
-            content="Charts generated.",  # clean, simple response
+            content="Charts generated.", 
             raw_output=figures,
             raw_input={"filepath": filepath},
             tool_name="plot_stock_chart"

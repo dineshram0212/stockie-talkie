@@ -1,15 +1,18 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from stockie import chat
-import plotly.io as pio
 import os
 import uuid
 import ast
+import requests
+
+import plotly.io as pio
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from stockie import chat
+
 
 app = FastAPI()
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static files for charts
 os.makedirs("static/charts", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -26,7 +28,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.post("/chat")
 async def chat_endpoint(request: Request):
     body = await request.json()
-    query = body.get("query")  # ✅ frontend sends 'query', not 'message'
+    query = body.get("query")
 
     if not query:
         return {"error": "Missing query"}
@@ -34,6 +36,7 @@ async def chat_endpoint(request: Request):
     response = chat(query)
 
     output = {
+        "symbol": "",
         "chatResponse": response.response,
         "insights": {},
         "charts": [],
@@ -64,11 +67,40 @@ async def chat_endpoint(request: Request):
                         "url": f"/static/charts/{filename}"
                     })
 
-        elif tool_name == "search_web":
+        elif tool_name == "get_yahoo_finance_news":
             try:
                 articles = ast.literal_eval(tool.content) if isinstance(tool.content, str) else tool.content
                 output["news"].extend(articles[:3])
             except:
                 continue
+    
+        elif tool_name == "get_ohlcv":
+            try:
+                result = ast.literal_eval(tool.content) if isinstance(tool.content, str) else tool.content
+                filename, symbol = result
+                output["symbol"] = symbol
+            except:
+                continue
 
     return output
+
+
+@app.get("/ticker-search")
+def ticker_search(q: str):
+    url = "https://query1.finance.yahoo.com/v1/finance/search"
+    params = {
+        "q": q,
+        "quotes_count": 5,
+        "news_count": 0,
+        "lang": "en",
+    }
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+    }
+
+    try:
+        resp = requests.get(url, headers=headers, params=params, timeout=5)
+        return resp.json()
+    except Exception as e:
+        return {"error": str(e)}
