@@ -71,7 +71,7 @@ npm run dev
   - `Give me a detailed analysis of AAPL`
   - `What is the trend for NVDA.MX with news?`
   - `Show me charts for TCS.NS`
-- `Or, search for the ticker and click it!`
+- Or, search for the ticker and click it!
 
 ---
 
