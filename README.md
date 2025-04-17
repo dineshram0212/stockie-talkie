@@ -1,4 +1,3 @@
-```markdown
 # StockieTalkie: LLM-Powered Stock Analysis Agent
 
 StockieTalkie is an interactive AI-driven stock analysis application powered by LlamaIndex's ReActAgent and Groq LLM APIs. It integrates multiple tools to perform detailed analysis of stocks including OHLCV data fetching, technical indicators, chart generation, and real-time news retrieval.
@@ -96,4 +95,3 @@ npm run dev
 ## License
 
 This project is licensed under the MIT License.
-```
