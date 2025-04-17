@@ -1,12 +1,6 @@
-import os
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from dotenv import load_dotenv
-from llama_index.core.workflow import Context
-load_dotenv()
-
-av_apikey = os.getenv('AV_API_KEY')
 
 
 def count_macd_crossovers(macd, signal):

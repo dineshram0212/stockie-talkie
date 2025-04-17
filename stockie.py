@@ -1,19 +1,21 @@
 import os
 from dotenv import load_dotenv
+import nest_asyncio
+
 from llama_index.llms.groq import Groq
 from llama_index.core.tools import FunctionTool
 from llama_index.core.agent import ReActAgent
+
 from tools.prompts import system_prompt
 from tools.utils import search_ticker_yfinance
 from tools.ohlcv_func import get_ohlcv, generate_statistical_insights
 from tools.charts import CustomChartTool
 from tools.web_search import get_yahoo_finance_news
-import nest_asyncio
 
 nest_asyncio.apply()
 load_dotenv()
 
-llm_apikey = os.getenv('GROQ_API_KEY')
+llm_apikey = os.getenv('API_KEY')
 llm = Groq(model="llama3-70b-8192", api_key=llm_apikey)
 
 search_ticker_tool = FunctionTool.from_defaults(fn=search_ticker_yfinance)
